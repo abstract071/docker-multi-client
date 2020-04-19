@@ -1,0 +1,16 @@
+version: 2.1
+orbs:
+  node: circleci/node@2.0.2
+#jobs:
+#  build-and-test:
+#    executor:
+#      name: node/default
+#    steps:
+#      - checkout # special step to check out source code to working directory
+#      - node/install-packages
+#      - npm run test
+workflows:
+  Build and Test:
+    jobs:
+#      - build-and-test
+      - node/test
