@@ -3,6 +3,9 @@
 .vscode/
 .DS_Store
 
+# aws elastic beanstalk specific
+Dockerrun.aws.json
+
 # logs
 logs/
 *.log

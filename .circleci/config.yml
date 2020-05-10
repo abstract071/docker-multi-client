@@ -1,16 +1,28 @@
 version: 2.1
 orbs:
   node: circleci/node@2.0.2
-#jobs:
-#  build-and-test:
-#    executor:
-#      name: node/default
-#    steps:
-#      - checkout # special step to check out source code to working directory
-#      - node/install-packages
-#      - npm run test
+  docker: circleci/docker@1.0.1
+  aws-cli: circleci/aws-cli@1.0.0
+jobs:
+  deploy:
+    steps:
+      - run:
+          command: |
+            aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 119074797651.dkr.ecr.us-west-2.amazonaws.com
+            docker build -t 119074797651.dkr.ecr.us-west-2.amazonaws.com/docker-multi .
+            docker push 119074797651.dkr.ecr.us-west-2.amazonaws.com/docker-multi
 workflows:
   Build and Test:
     jobs:
-#      - build-and-test
       - node/test
+      - docker/install-docker
+      - aws-cli/install
+      - aws-cli/setup:
+          aws-region: us-west-2
+          requires:
+            - aws-cli/install
+      - deploy:
+          requires:
+            - node/test
+            - docker/install-docker
+            - aws-cli/setup
