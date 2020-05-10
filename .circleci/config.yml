@@ -4,25 +4,25 @@ orbs:
   docker: circleci/docker@1.0.1
   aws-cli: circleci/aws-cli@1.0.0
 jobs:
-  deploy:
+  aws-login:
+    executor: aws-cli/default
     steps:
-      - run:
-          command: |
-            aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 119074797651.dkr.ecr.us-west-2.amazonaws.com
-            docker build -t 119074797651.dkr.ecr.us-west-2.amazonaws.com/docker-multi .
-            docker push 119074797651.dkr.ecr.us-west-2.amazonaws.com/docker-multi
+      - checkout
+      - run: aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 119074797651.dkr.ecr.us-west-2.amazonaws.com
 workflows:
-  Build and Test:
+  Test and Deploy:
     jobs:
       - node/test
-      - docker/install-docker
       - aws-cli/install
       - aws-cli/setup:
-          aws-region: us-west-2
           requires:
             - aws-cli/install
-      - deploy:
+      - aws-login:
           requires:
             - node/test
-            - docker/install-docker
             - aws-cli/setup
+      - docker/publish:
+          requires:
+            - aws-login
+          image: 119074797651.dkr.ecr.us-west-2.amazonaws.com/docker-multi
+          registry: 119074797651.dkr.ecr.us-west-2.amazonaws.com/docker-multi
