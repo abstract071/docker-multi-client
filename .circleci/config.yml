@@ -9,6 +9,14 @@ jobs:
     steps:
       - checkout
       - run: aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 119074797651.dkr.ecr.us-west-2.amazonaws.com
+  docker-publish:
+    executor: docker/docker
+    steps:
+      - checkout
+      - docker/publish:
+          image: 119074797651.dkr.ecr.us-west-2.amazonaws.com/docker-multi
+          registry: 119074797651.dkr.ecr.us-west-2.amazonaws.com/docker-multi
+
 workflows:
   Test and Deploy:
     jobs:
@@ -21,8 +29,6 @@ workflows:
           requires:
             - node/test
             - aws-cli/setup
-      - docker/publish:
+      - docker-publish:
           requires:
             - aws-login
-          image: 119074797651.dkr.ecr.us-west-2.amazonaws.com/docker-multi
-          registry: 119074797651.dkr.ecr.us-west-2.amazonaws.com/docker-multi
