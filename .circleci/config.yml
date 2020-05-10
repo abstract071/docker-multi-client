@@ -17,6 +17,7 @@ jobs:
 #          image: 119074797651.dkr.ecr.us-west-2.amazonaws.com/docker-multi
 #          registry: 119074797651.dkr.ecr.us-west-2.amazonaws.com/docker-multi
 workflows:
+  version: 2
   test_and_deploy:
     jobs:
       - node/test
