@@ -18,7 +18,7 @@ jobs:
           registry: 119074797651.dkr.ecr.us-west-2.amazonaws.com/docker-multi
 
 workflows:
-  Test and Deploy:
+  test_and_deploy:
     jobs:
       - node/test
       - aws-cli/install
