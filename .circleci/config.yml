@@ -23,7 +23,7 @@ workflows:
   test_and_deploy:
     jobs:
       - node/test
-      - aws-setup
+      - aws-setup:
           requires:
             - node/test
 #      - aws-cli/setup:
