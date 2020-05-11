@@ -10,7 +10,7 @@ jobs:
 #      - checkout
       - aws-cli/install
       - aws-cli/setup
-      - run: aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 119074797651.dkr.ecr.us-west-2.amazonaws.com
+      - run: aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
 #  docker-publish:
 #    executor: docker/docker
 #    steps:
