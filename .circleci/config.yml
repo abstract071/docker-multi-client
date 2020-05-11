@@ -22,9 +22,9 @@ workflows:
     jobs:
       - node/test
       - aws-cli/install
-      - aws-cli/setup:
-          requires:
-            - aws-cli/install
+#      - aws-cli/setup:
+#          requires:
+#            - aws-cli/install
 #      - aws-login:
 #          requires:
 #            - node/test
