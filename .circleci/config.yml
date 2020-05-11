@@ -10,13 +10,6 @@ jobs:
       - aws-cli/install
       - aws-cli/setup
       - run: aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
-  docker-publish:
-    executor: docker/docker
-    steps:
-      - checkout
-      - docker/publish:
-          image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/docker-multi
-          registry: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/docker-multi
 workflows:
   test_and_deploy:
     jobs:
@@ -24,6 +17,8 @@ workflows:
       - aws-setup:
           requires:
             - node/test
-      - docker-publish:
+      - docker/publish:
           requires:
             - aws-setup
+          image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/docker-multi
+          registry: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/docker-multi
