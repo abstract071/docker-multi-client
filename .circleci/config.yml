@@ -1,24 +1,27 @@
 version: 2.1
 orbs:
   node: circleci/node@2.0.2
-  docker: circleci/docker@1.0.1
-  aws-cli: circleci/aws-cli@1.0.0
-jobs:
-  aws-setup:
-    executor: aws-cli/default
-    steps:
-      - aws-cli/install
-      - aws-cli/setup
-      - run: aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+#  docker: circleci/docker@1.0.1
+#  aws-cli: circleci/aws-cli@1.0.0
+  aws-ecr: circleci/aws-ecr@6.8.2
+#jobs:
+#  aws-setup:
+#    executor: aws-cli/default
+#    steps:
+#      - aws-cli/install
+#      - aws-cli/setup
+#      - run: aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
 workflows:
   test_and_deploy:
     jobs:
       - node/test
-      - aws-setup:
-          requires:
-            - node/test
-      - docker/publish:
-          requires:
-            - aws-setup
-          image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/docker-multi
-          registry: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/docker-multi
+#      - aws-setup:
+#          requires:
+#            - node/test
+#      - docker/publish:
+#          requires:
+#            - aws-setup
+#          image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/docker-multi
+#          registry: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/docker-multi
+      - aws-ecr/build-and-push-image:
+          repo: docker-multi
